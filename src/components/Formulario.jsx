@@ -1,8 +1,11 @@
 import React from 'react'
 import { Formik, Form, Field } from 'formik'
 import * as yup from 'yup'
+import {useNavigate} from 'react-router-dom'
 
 const Formulario = () => {
+
+    const navigate = useNavigate()
     
     const nuevoClienteSchema = yup.object().shape({
         nombre: yup.string().min(5, 'El nombre del cliente es muy corto').max(20, 'El nombre del cliente es muy largo').required('El nombre del cliente es requerido'),
@@ -11,7 +14,33 @@ const Formulario = () => {
         telefono: yup.number().integer('Numero no valido').positive('Numero no valido').typeError('El numero no es valido'),
     })
 
-    const agregarNuevoCliente = () => {
+    const agregarNuevoCliente = async (values) => {
+
+        try {
+
+            const url = "http://localhost:4000/clientes"
+            const respuesta = await fetch (url, {
+                method: 'POST',
+                body: JSON.stringify(values),
+                headers: {
+                    'Content-Type':'application/json'
+                }
+            })
+            const resultado = await respuesta.json()
+            console.log(resultado)
+
+        } catch (error) {
+
+            console.log(error)
+
+        }
+    }
+
+    const redireccionarUsuario = async (values, {resetForm}) => {
+
+        await agregarNuevoCliente(values)
+        resetForm()
+        navigate('/clientes')
 
     }
 
@@ -26,11 +55,11 @@ const Formulario = () => {
                 telefono: "",
                 notas: "",
             }}
-            onSubmit={(values) => agregarNuevoCliente(values)}
+            onSubmit={(values, {resetForm}) => redireccionarUsuario(values, {resetForm})}
             validationSchema={nuevoClienteSchema}
         >
             {
-                ({errors}) => {
+                ({errors, touched}) => {
 
                     return (
 
@@ -50,8 +79,8 @@ const Formulario = () => {
                                     placeholder='Ingrese nombre del cliente'
                                 />
                                 {
-                                    errors.nombre ? (
-                                        <h1>Error</h1>
+                                    errors.nombre && touched.nombre ? (
+                                        <p>{errors.nombre}</p>
                                     ) : (
                                         null
                                     )
@@ -71,6 +100,13 @@ const Formulario = () => {
                                     className='mt-2 block w-full p-3 bg-gray-50'
                                     placeholder="Ingrese nombre de la empresa"
                                 />
+                                {
+                                    errors.empresa && touched.empresa ? (
+                                        <p>{errors.empresa}</p>
+                                    ) : (
+                                        null
+                                    )
+                                }
                             </div>
                             <div className='mb-4'>
                                 <label 
@@ -86,6 +122,13 @@ const Formulario = () => {
                                     className='mt-2 block w-full p-3 bg-gray-50'
                                     placeholder="Ingrese email del cliente"
                                 />
+                                {
+                                    errors.email && touched.email ? (
+                                        <p>{errors.email}</p>
+                                    ) : (
+                                        null
+                                    )
+                                }
                             </div>
                             <div className='mb-4'>
                                 <label 
@@ -101,6 +144,13 @@ const Formulario = () => {
                                     className='mt-2 block w-full p-3 bg-gray-50'
                                     placeholder="Ingrese el numero de telefono"
                                 />
+                                {
+                                    errors.telefono && touched.telefono ? (
+                                        <p>{errors.telefono}</p>
+                                    ) : (
+                                        null
+                                    )
+                                }
                             </div>
                             <div className='mb-4'>
                                 <label 
