@@ -1,7 +1,7 @@
 {
   "clientes": [
     {
-      "nombre": "Federico",
+      "nombre": "Federico - UPDATE",
       "empresa": "Lustmord",
       "email": "cuervog992@gmail.com",
       "telefono": "666",
@@ -15,6 +15,14 @@
       "telefono": "777",
       "notas": "Neural Ether",
       "id": 2
+    },
+    {
+      "nombre": "Lolola",
+      "empresa": "Atrium Carceri",
+      "email": "lola@lola.com",
+      "telefono": "123",
+      "notas": "Guau jaj chay",
+      "id": 3
     }
   ]
 }

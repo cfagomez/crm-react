@@ -3,7 +3,7 @@ import { Formik, Form, Field } from 'formik'
 import * as yup from 'yup'
 import {useNavigate} from 'react-router-dom'
 
-const Formulario = () => {
+const Formulario = ({cliente}) => {
 
     const navigate = useNavigate()
     
@@ -14,20 +14,37 @@ const Formulario = () => {
         telefono: yup.number().integer('Numero no valido').positive('Numero no valido').typeError('El numero no es valido'),
     })
 
-    const agregarNuevoCliente = async (values) => {
+    const handleSubmit = async (values) => {
 
         try {
 
-            const url = "http://localhost:4000/clientes"
-            const respuesta = await fetch (url, {
-                method: 'POST',
-                body: JSON.stringify(values),
-                headers: {
-                    'Content-Type':'application/json'
-                }
-            })
-            const resultado = await respuesta.json()
-            console.log(resultado)
+            if (Object.keys(cliente).length > 0) {
+
+                const url = `http://localhost:4000/clientes/${cliente.id}`
+                const respuesta = await fetch (url, {
+                    method: 'PUT',
+                    body: JSON.stringify(values),
+                    headers: {
+                        'Content-Type':'application/json'
+                    }
+                })
+                const resultado = await respuesta.json()
+                console.log(resultado)
+
+            } else {
+
+                const url = "http://localhost:4000/clientes"
+                const respuesta = await fetch (url, {
+                    method: 'POST',
+                    body: JSON.stringify(values),
+                    headers: {
+                        'Content-Type':'application/json'
+                    }
+                })
+                const resultado = await respuesta.json()
+                console.log(resultado)
+
+            }
 
         } catch (error) {
 
@@ -38,7 +55,7 @@ const Formulario = () => {
 
     const redireccionarUsuario = async (values, {resetForm}) => {
 
-        await agregarNuevoCliente(values)
+        await handleSubmit(values)
         resetForm()
         navigate('/clientes')
 
@@ -49,14 +66,15 @@ const Formulario = () => {
         <h1 className='text-gray-600 font-bold text-xl uppercase text-center'>Nuevo Cliente</h1>
         <Formik
             initialValues={{
-                nombre: "",
-                empresa: "",
-                email: "",
-                telefono: "",
-                notas: "",
+                nombre: cliente?.nombre ?? "",
+                empresa: cliente?.empresa ?? "",
+                email: cliente?.email ?? "",
+                telefono: cliente?.telefono ?? "",
+                notas: cliente?.notas ?? "",
             }}
             onSubmit={(values, {resetForm}) => redireccionarUsuario(values, {resetForm})}
             validationSchema={nuevoClienteSchema}
+            enableReinitialize={true}
         >
             {
                 ({errors, touched}) => {
@@ -181,6 +199,10 @@ const Formulario = () => {
         </Formik>
     </div>
   )
+}
+
+Formulario.defaultProps = {
+    cliente: {}
 }
 
 export default Formulario
