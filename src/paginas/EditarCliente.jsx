@@ -1,12 +1,14 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import Formulario from '../components/Formulario'
+import Spinner from '../components/Spinner'
 
 const EditarCliente = () => {
 
   const {id} = useParams()
 
   const [cliente, setCliente] = React.useState({})
+  const [cargando, setCargando] = React.useState(true)
 
   React.useEffect(() => {
 
@@ -21,19 +23,31 @@ const EditarCliente = () => {
         console.log(error)
       }
 
+      setCargando(false)
+
     }
 
     obtenerDatosClienteAPI()
 
-  })
+  }, [])
 
-  return (
+  return !cargando ? (
     <div>
-        <h1>Editar Cliente</h1>
-        <Formulario 
-          cliente={cliente}
-        />
+      {
+        Object.keys(cliente).length === 0 ? (
+          'No hay resultados'
+        ) : (
+          <>
+            <h1>Editar Cliente</h1>
+            <Formulario 
+              cliente={cliente}
+            />
+          </>
+        )
+      }
     </div>
+  ) : (
+    <Spinner />
   )
 }
 

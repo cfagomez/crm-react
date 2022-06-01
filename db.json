@@ -1,28 +1,3 @@
 {
-  "clientes": [
-    {
-      "nombre": "Federico - UPDATE",
-      "empresa": "Lustmord",
-      "email": "cuervog992@gmail.com",
-      "telefono": "666",
-      "notas": "Neural Ether",
-      "id": 1
-    },
-    {
-      "nombre": "Giuliana",
-      "empresa": "Artte Naif",
-      "email": "giu.mastrolillo@gmail.com",
-      "telefono": "777",
-      "notas": "Neural Ether",
-      "id": 2
-    },
-    {
-      "nombre": "Lolola",
-      "empresa": "Atrium Carceri",
-      "email": "lola@lola.com",
-      "telefono": "123",
-      "notas": "Guau jaj chay",
-      "id": 3
-    }
-  ]
+  "clientes": []
 }

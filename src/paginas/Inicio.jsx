@@ -21,6 +21,29 @@ const Inicio = () => {
 
   },[])
 
+  const eliminarCliente = async (id) => {
+
+    const confirmar = confirm('¿Estas seguro de eliminar a este cliente')
+
+    if (confirm) {
+
+      const url=`http://localhost:4000/clientes/${id}`
+      const respuesta = await fetch(url, {
+          method: 'DELETE'
+      })
+      await respuesta.json()
+
+      const listaClienteModificada = clientes.filter(cliente => cliente.id !== id)
+      setClientes(listaClienteModificada)
+
+    } else {
+
+        return
+
+    }
+
+}
+
   return (
     <>
       <h1 className='font-black text-4xl text-blue-900'>Clientes</h1>
@@ -41,6 +64,7 @@ const Inicio = () => {
               <Cliente 
                 key={cliente.id}
                 cliente={cliente}
+                eliminarCliente={eliminarCliente}
               />
 
             ))
